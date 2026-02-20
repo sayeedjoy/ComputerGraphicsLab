@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+
+# CMake build directories
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# Build artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+
+# Ninja
+.ninja_deps
+.ninja_log
+build.ninja
+
+# CLion / IntelliJ
+.idea/
+*.iml
