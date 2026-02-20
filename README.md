@@ -40,6 +40,10 @@ If configuration fails, add Homebrew's prefix to CMake options in CLion:
 ```bash
 -DCMAKE_PREFIX_PATH=$(brew --prefix)
 ```
+OR 
+```
+-DCMAKE_PREFIX_PATH=/opt/homebrew;/opt/homebrew/opt/glfw
+```
 3. Reload CMake.
 
 For Apple Silicon, Homebrew is usually under `/opt/homebrew`.  
