@@ -6,28 +6,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(glfw3 CONFIG REQUIRED)
 
-add_executable(untitled
-        main.cpp
-        glad.c
-)
-
-target_include_directories(untitled PRIVATE
+# ---- Common GLAD target ----
+add_library(glad STATIC glad.c)
+target_include_directories(glad PUBLIC
         ${CMAKE_SOURCE_DIR}/include
 )
 
-# Pick the correct GLFW target (Homebrew often provides "glfw")
-if(TARGET glfw3::glfw)
-    target_link_libraries(untitled PRIVATE glfw3::glfw)
-elseif(TARGET glfw)
-    target_link_libraries(untitled PRIVATE glfw)
-else()
-    message(FATAL_ERROR "GLFW was found but no usable CMake target (glfw3::glfw or glfw) was exported.")
-endif()
-
-# macOS: you usually also need these frameworks for OpenGL + windowing
-target_link_libraries(untitled PRIVATE
+# ---- Common link helper for macOS frameworks ----
+set(MAC_GLFW_FRAMEWORKS
         "-framework OpenGL"
         "-framework Cocoa"
         "-framework IOKit"
         "-framework CoreVideo"
 )
+
+# Pick the correct GLFW target (Homebrew often provides "glfw")
+set(GLFW_TARGET "")
+if(TARGET glfw3::glfw)
+    set(GLFW_TARGET glfw3::glfw)
+elseif(TARGET glfw)
+    set(GLFW_TARGET glfw)
+else()
+    message(FATAL_ERROR "GLFW was found but no usable CMake target (glfw3::glfw or glfw) was exported.")
+endif()
+
+# ---- Executable 1: main.cpp ----
+add_executable(untitled main.cpp)
+target_link_libraries(untitled PRIVATE glad ${GLFW_TARGET} ${MAC_GLFW_FRAMEWORKS})
+target_include_directories(untitled PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+# ---- Executable 2: Lab2.cpp ----
+add_executable(Lab2 Lab2.cpp)
+target_link_libraries(Lab2 PRIVATE glad ${GLFW_TARGET} ${MAC_GLFW_FRAMEWORKS})
+target_include_directories(Lab2 PRIVATE ${CMAKE_SOURCE_DIR}/include)
